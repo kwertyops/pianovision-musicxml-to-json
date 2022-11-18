@@ -95,7 +95,8 @@ for measure in json_song["tracksV2"]["left"]:
         note["staff"] = 2
         # left_json_notes.append(note)
         if note["ticksStart"] in json_notes_by_ticks:
-            json_notes_by_ticks[note["ticksStart"]] += [note]
+            if note["note"] not in [n["note"] for n in json_notes_by_ticks[note["ticksStart"]]]:
+                json_notes_by_ticks[note["ticksStart"]] += [note]
         else:
             json_notes_by_ticks[note["ticksStart"]] = [note]
 
@@ -159,8 +160,8 @@ for o in offsets:
 for i, (j, x) in enumerate(zip(json_notes_sorted, xml_notes_sorted)):
     jnote = j['note']
     xnote = note_to_midinum(x)
+    print(j['staff'], midinum_to_note(jnote), midinum_to_note(xnote), j['measureInd'])
     if jnote != xnote:
-        print(j['staff'], midinum_to_note(jnote), midinum_to_note(xnote), j['measureInd'])
         print("Error!")
         exit()
 
